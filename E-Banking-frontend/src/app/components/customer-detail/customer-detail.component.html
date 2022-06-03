@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-10/12 border-t-2 border-gray-100">
+        <div class="text-2xl font-mono font-bold">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Customer Detail
+        </div>
+        <div class="text-center text-2xl font-mono font-bold">
+            <span class="text-3xl text-red-600 mdi mdi-bank"></span> Bank Accounts
+            <div class="mt-2 text-sm text-gray-400">(Double click on card to see Account Details)</div>
+        </div>
+        <div class="mt-5 p-5 grid grid-cols-5">
+            <div class="col-span-1 border-r-2 border-stone-200">
+                <div class="mb-2 text-2xl font-mono font-bold">
+                    {{ customer?.name }}
+                </div>
+                <div class="mb-2 text-xl font-mono">
+                    <span class="mdi mdi-24px mdi-account text-red-500"></span> {{ customer?.username }}
+                </div>
+                <div class="mb-2 text-xl font-mono">
+                    <span class="mdi mdi-email text-red-500"></span> {{ customer?.email }}
+                </div>
+            </div>
+            <div *ngIf="bankAccounts?.length == 0">
+                <div class="text-center text-xl font-mono text-gray-400">
+                    No Bank Accounts
+                </div>
+            </div>
+            <div *ngIf="bankAccounts?.length != 0" class="col-span-4 grid grid-cols-3 px-5 gap-4">
+                <div (dblclick)="goToAccountDetail(ba.id)" *ngFor="let ba of bankAccounts;" class="bg-stone-100 h-32 relative border-2 p-2 rounded-md shadow-lg ease-in-out hover:border-red-500 hover:scale-105">
+                    <span class="float-right text-2xl font-mono">{{ ba.balance.toFixed(2) }}<span class="text-red-500 font-bold">$</span></span>
+                    <div class="text-2xl font-mono font-bold">
+                        <span *ngIf="ba.accountType == 'CurrentAccount'" class="mdi mdi-24px mdi-bank text-red-500">CA</span>
+                        <span *ngIf="ba.accountType == 'SavingAccount'" class="mdi mdi-24px mdi-bank text-red-500">SA</span>
+                    </div>
+                    <div class="mt-1 text-lg font-mono">
+                        <span class="text-gray-500">
+                            <span *ngIf="ba.accountType == 'CurrentAccount'">
+                                overDraft : <span class="text-red-500">{{ ba.overDraft }}</span>
+                        </span>
+                        <span *ngIf="ba.accountType == 'SavingAccount'">
+                                interestRate : <span class="text-red-500">{{ ba.interestRate }}%</span>
+                        </span>
+                        </span>
+                    </div>
+                    <div class="text-xl font-mono absolute bottom-0 right-0 p-1">
+                        <span class="text-gray-500">
+                            {{ ba.status }}
+                        </span>
+                    </div>
+                    <div class="text-xl font-mono absolute inset-x-2 bottom-1">
+                        <span class="mdi mdi-clock-time-three-outline text-red-500"></span> {{ ba.createdAt | date: 'dd/MM/yyyy' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

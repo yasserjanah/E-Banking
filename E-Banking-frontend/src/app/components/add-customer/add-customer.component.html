@@ -1,0 +1,45 @@
+<app-navbar></app-navbar>
+<main class="p-5 flex justify-center">
+    <div class="w-3/6 p-4 bg-white shadow-md border-t-2 border-t-gray-100">
+        <h1 class="text-center font-mono font-bold text-2xl">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Add New Customer
+        </h1>
+        <form class="mt-4 text-center" [formGroup]="addNewCustomerFormGroup" (ngSubmit)="addNewCustomer()">
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" formControlName="name" placeholder="Customer Name" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewCustomerFormGroup.controls['name'].touched && addNewCustomerFormGroup.controls['name'].errors && addNewCustomerFormGroup.controls['name'].errors!['required']">
+                    Customer name is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" formControlName="email" placeholder="Customer Email" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewCustomerFormGroup.controls['email'].touched && addNewCustomerFormGroup.controls['email'].errors && (addNewCustomerFormGroup.controls['email'].errors!['required'] || addNewCustomerFormGroup.controls['email'].errors!['email'])">
+                    Customer email is not valid
+                </span>
+            </div>
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" formControlName="username" placeholder="Customer Username" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewCustomerFormGroup.controls['username'].touched && addNewCustomerFormGroup.controls['username'].errors && addNewCustomerFormGroup.controls['username'].errors!['required']">
+                    Customer username is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="password" formControlName="password" placeholder="Customer Password" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewCustomerFormGroup.controls['password'].touched && addNewCustomerFormGroup.controls['password'].errors && addNewCustomerFormGroup.controls['password'].errors!['required']">
+                    Customer password is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="password" formControlName="re_password" placeholder="Customer Re-Password" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewCustomerFormGroup.controls['re_password'].touched && addNewCustomerFormGroup.controls['re_password'].errors && addNewCustomerFormGroup.controls['re_password'].errors!['required']">
+                    Customer name is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <button [disabled]="!addNewCustomerFormGroup.valid" type="submit" class="px-2 py-2 w-2/5 disabled:bg-red-200 disabled:border-0 bg-red-500 text-white hover:bg-red-400 border-2 border-red-500">
+                    <span class="mdi mdi-account-plus text-xl uppercase"> Add</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

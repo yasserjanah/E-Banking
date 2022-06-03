@@ -1,0 +1,33 @@
+<nav class="bg-red-600 p-6 shadow-lg flex justify-between items-center">
+    <h1 class="text-2xl text-white font-extrabold ease-in-out hover:scale-105 duration-100">E-Banking</h1>
+    <div class="flex justify-evenly items-center gap-2" *ngIf="isLoggedIn && userType == 'EMPLOYEE'">
+        <button routerLink="/" [ngClass]="{'bg-white text-red-600': isRouteActive('/'), 'text-white': !isRouteActive('/')}" class="text-lg font-mono border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-home"></span>
+            Home
+        </button>
+        <button routerLink="/customers" [ngClass]="{'bg-white text-red-600': isRouteActive('/customers'), 'text-white': !isRouteActive('/customers')}" class="text-white font-mono text-lg border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-bank"></span>
+            Customers
+        </button>
+        <button routerLink="/accounts" [ngClass]="{'bg-white text-red-600': isRouteActive('/accounts'), 'text-white': !isRouteActive('/accounts')}" class="text-white font-mono text-lg border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-account-group"></span>
+            Accounts
+        </button>
+        <button (click)="logout()" class="text-lg text-white font-mono border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-logout-variant"></span>
+            Logout
+        </button>
+    </div>
+    <div class="flex justify-evenly items-center gap-2 text-white" *ngIf="isLoggedIn && userType == 'CUSTOMER'">
+        <button (click)="logout()" class="text-lg font-mono border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-logout-variant"></span>
+            Logout
+        </button>
+    </div>
+    <div class="flex justify-evenly items-center gap-2" *ngIf="!isLoggedIn">
+        <button (click)="login()" class="text-lg text-white font-mono border-2 border-white px-4 py-2 hover:text-red-600 hover:bg-white ease-in-out duration-500">
+            <span class="mdi mdi-login-variant"></span>
+            Login
+        </button>
+    </div>
+</nav>

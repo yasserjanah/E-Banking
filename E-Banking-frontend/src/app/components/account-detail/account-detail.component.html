@@ -1,0 +1,77 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-10/12 border-t-2 border-gray-100">
+        <div class="text-2xl font-mono font-bold">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Account Detail
+        </div>
+        <div class="text-center text-2xl font-mono font-bold">
+            <span class="text-2xl text-red-600 mdi mdi-view-list-outline"></span> Accounts Operations
+        </div>
+        <div class="mt-5 p-5 grid grid-cols-5">
+            <div class="col-span-1 border-r-2 border-stone-200">
+                <div class="mb-2 text-2xl font-mono font-bold">
+                    <span class="mdi mdi-bank text-red-500"></span> {{ account?.accountType }}
+                </div>
+                <div class="mb-2 text-xl font-mono">
+                    <span class="mdi mdi-24px mdi-currency-usd text-red-500"></span> {{ account?.balance?.toFixed(2) }}
+                </div>
+            </div>
+            <div *ngIf="operationsPagination?.accountOperationDTOS?.length == 0">
+                <div class="text-center text-xl font-mono text-gray-400">
+                    No operations yet
+                </div>
+            </div>
+            <div *ngIf="operationsPagination?.accountOperationDTOS?.length != 0" class="col-span-4">
+                <div class="w-full">
+                    <table class="border-collapse w-full">
+                        <thead>
+                            <tr>
+                                <th class="px-6 w-1/6 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">#</th>
+                                <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Type</th>
+                                <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Amount</th>
+                                <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Description</th>
+                                <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Date</th>
+                                <!-- <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white"></th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let op of operationsPagination?.accountOperationDTOS; index as i" [ngClass]="{'bg-gray-100': i % 2 != 0}" class="font-mono">
+                                <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <span class="text-black font-bold">{{ i+1 }}</span>
+                                </td>
+                                <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <span class="text-black font-bold">{{ op.type }}</span>
+                                </td>
+                                <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <span *ngIf="op.type == 'CREDIT'" class="text-green-600 font-bold">+{{ op.amount.toFixed(2) }}$</span>
+                                    <span *ngIf="op.type == 'DEBIT'" class="text-red-600 font-bold">-{{ op.amount.toFixed(2) }}$</span>
+                                </td>
+                                <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <span class="text-black font-bold">{{ op.description }}</span>
+                                </td>
+                                <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <span class="text-black font-bold">{{ op.operationDate | date }}</span>
+                                </td>
+                                <!-- <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                    <button class="px-2 py-1 bg-gray-500 text-white hover:bg-gray-400 border-2 border-gray-500" (click)="goToCustomerAccounts(customer.userId)">
+                                        <span class="mdi mdi-eye"></span>
+                                    </button>
+                                    <button class="px-2 py-1 bg-red-500 text-white hover:bg-red-400 border-2 border-red-500" (click)="deleteCustomer(customer.userId)">
+                                        <span class="mdi mdi-delete-forever"></span>
+                                    </button>
+                                </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="mt-4 text-center">
+                        <span *ngFor="let page of totalPages;">
+                            <button (click)="goToPage(page)" class="px-4 py-2 bg-red-500 hover:bg-red-400 text-white font-mono font-bold ml-2" [ngClass]="{'bg-transparent border-2 border-red-500 text-black hover:bg-transparent': page==currentPage}">
+                                {{page}}
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

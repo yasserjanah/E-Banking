@@ -1,0 +1,70 @@
+<app-navbar></app-navbar>
+<main class="p-5 flex justify-center">
+    <div class="w-3/6 p-4 bg-white shadow-md border-t-2 border-t-gray-100">
+        <h1 class="text-center font-mono font-bold text-2xl">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Add New Account
+        </h1>
+        <form class="mt-4 text-center font-mono" [formGroup]="addNewAccountFormGroup" (ngSubmit)="addNewAccount()">
+            <div class="mt-4">
+                <select (change)="OnChangeAccountType($event)" formControlName="accountType" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent">
+                    <option value="accountType" [defaultSelected]="true">Account Type</option>
+                    <option value="CurrentAccount">CurrentAccount</option>
+                    <option value="SavingAccount">SavingAccount</option>
+                </select>
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewAccountFormGroup.controls['accountType'].touched && is_current_or_saving == undefined || is_current_or_saving == 'accountType'">
+                    Account Type is required
+                    </span>
+            </div>
+            <div class="mt-4">
+                <input type="number" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" formControlName="balance" placeholder="Account initial balance" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewAccountFormGroup.controls['balance'].touched && addNewAccountFormGroup.controls['balance'].errors && (addNewAccountFormGroup.controls['balance'].errors!['required'])">
+                    Account initial balance is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <select formControlName="status" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent">
+                    <option value="accountStatus" [defaultSelected]="true">Account Status</option>
+                    <option value="CREATED">CREATED</option>
+                    <option value="ACTIVATED">ACTIVATED</option>
+                    <option value="SUSPENDED">SUSPENDED</option>
+                </select>
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewAccountFormGroup.controls['status'].touched && addNewAccountFormGroup.controls['status'].errors && addNewAccountFormGroup.controls['status'].errors!['required']">
+                    Account status is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="date" formControlName="createdAt" placeholder="Created at" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="addNewAccountFormGroup.controls['createdAt'].touched && addNewAccountFormGroup.controls['createdAt'].errors && addNewAccountFormGroup.controls['createdAt'].errors!['required']">
+                    Created At is required
+                </span>
+            </div>
+            <div class="mt-4 duration-1000" *ngIf="is_current_or_saving == 'CurrentAccount'">
+                <input (change)="updateoverDraftIsNotSet($event)" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="number" formControlName="overDraft" placeholder="OverDraft" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="overDraftIsNotSet">
+                    OverDraft is required
+                </span>
+            </div>
+            <div class="mt-4 duration-1000" *ngIf="is_current_or_saving == 'SavingAccount'">
+                <input (change)="updateinterestRateIsNotSet($event)" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="number" formControlName="interestRate" placeholder="interestRate" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="interestRateIsNotSet">
+                    InterestRate is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input (input)="searchCustomer($event)" class="bg-gray-100 px-2 py-2 w-2/5 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" type="text" formControlName="customer" placeholder="Type name of the customer" />
+                <div class="mdi mdi-information text-gray-500 mt-2 text-sm">Search customer, click to select</div>
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="customerIsNotExists">
+                    Customer is not exists
+                </span>
+                <ul class="mt-2 p-4" *ngIf="resultCustomers && resultCustomers.length > 0">
+                    <li (click)="updateSelectedCustomer(c)" class="mb-2 p-2 bg-stone-50 hover:scale-105 hover:text-white hover:font-bold hover:bg-red-500" *ngFor="let c of resultCustomers; index as i">{{c.name}}</li>
+                </ul>
+            </div>
+            <div class="mt-4">
+                <button [disabled]="!addNewAccountFormGroup.valid" type="submit" class="px-2 py-2 w-2/5 disabled:bg-red-200 disabled:border-0 bg-red-500 text-white hover:bg-red-400 border-2 border-red-500">
+                    <span class="mdi mdi-account-plus text-xl uppercase"> Add</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</main>

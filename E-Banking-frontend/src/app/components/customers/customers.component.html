@@ -1,0 +1,76 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-10/12 border-t-2 border-gray-100">
+        <div class="text-2xl font-mono font-bold">
+            <button routerLink="new" class="float-right px-4 py-2 text-red-600 border-2 border-red-500 shadow-md hover:shadow-lg">
+                <span class="mdi mdi-account-plus"></span>
+                Add Customer
+            </button>
+            <span class="text-3xl text-red-600 hover:underline">#</span> List of customers
+        </div>
+        <ng-container *ngIf="customers | async as customersList; else LoadingOrError">
+            <form class="flex justify-center" [formGroup]="searchFormGroup" (ngSubmit)="searchCustomers()">
+                <input type="text" formControlName="name" class="w-2/5 p-2 pl-4 border border-gray-200 bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent" placeholder="Search..." />
+                <button type="submit" class="p-2 px-3 bg-red-500 text-white hover:bg-red-400 border-2 border-red-500">
+                    <span class="mdi mdi-search-web text-xl uppercase">Search</span>
+                </button>
+            </form>
+            <div class="mt-4">
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-6 w-1/6 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">#</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Name</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Username</th>
+                            <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Email</th>
+                            <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let customer of customersList; index as i" [ngClass]="{'bg-gray-100': i % 2 != 0}">
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                {{ i+1 }}
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                {{ customer.name }}
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                {{ customer.username }}
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                {{ customer.email }}
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <button class="px-2 py-1 bg-gray-500 text-white hover:bg-gray-400 border-2 border-gray-500" (click)="goToCustomerAccounts(customer.userId)">
+                                    <span class="mdi mdi-eye"></span>
+                                </button>
+                                <button class="px-2 py-1 bg-red-500 text-white hover:bg-red-400 border-2 border-red-500" (click)="deleteCustomer(customer.userId)">
+                                    <span class="mdi mdi-delete-forever"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="customersList.length == 0">
+                <div class="w-full mt-4 text-center text-md font-mono font-bold text-gray-500">No customers found</div>
+            </div>
+        </ng-container>
+        <ng-template #LoadingOrError>
+            <div *ngIf="errorMessage; else Loading">
+                <div class="mt-4 text-center text-md font-mono font-bold text-gray-500">No customers found due to
+                    <i class="text-center text-red-600">{{ errorMessage }}</i>
+                </div>
+            </div>
+            <ng-template #Loading>
+                <div class="flex items-center justify-center p-5">
+                    <div class="flex space-x-2 animate-pulse">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    </div>
+                </div>
+            </ng-template>
+        </ng-template>
+    </div>
+</main>

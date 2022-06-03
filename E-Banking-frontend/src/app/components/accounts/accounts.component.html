@@ -1,0 +1,78 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-10/12 border-t-2 border-gray-100">
+        <div class="text-2xl font-mono font-bold">
+            <button routerLink="new" class="float-right px-4 py-2 text-red-600 border-2 border-red-500 shadow-md hover:shadow-lg">
+                <span class="mdi mdi-account-plus"></span>
+                New Account
+            </button>
+            <span class="text-3xl text-red-600 hover:underline">#</span> List of Accounts
+        </div>
+        <ng-container *ngIf="accounts | async as accountsList; else LoadingOrError">
+            <div class="mt-5">
+                <table class="border-collapse w-full mt-10">
+                    <thead>
+                        <tr>
+                            <th class="px-6 w-1/6 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">#</th>
+                            <th class="px-6 w-1/6 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Name</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Account Type</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Balance</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Created At</th>
+                            <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let account of accountsList; index as i" [ngClass]="{'bg-gray-100': i % 2 != 0}" class="font-mono">
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ i+1 }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ account.customerDTO?.name }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500">
+                                <span *ngIf="account.accountType == 'CurrentAccount'" class="text-black font-bold text-xl">
+                                    <span class="mdi mdi-bank text-red-500">CA</span>
+                                </span>
+                                <span *ngIf="account.accountType == 'SavingAccount'" class="text-black font-bold text-xl">
+                                    <span class="mdi mdi-bank text-red-500">SA</span>
+                                </span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ account.balance.toFixed(2) }} <span class="font-bold text-red-500 text-xl">$</span>
+                                </span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+
+                                <span class="text-black font-bold">{{ account.createdAt | date: 'dd/MM/yyyy' }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <button class="px-2 py-1 bg-gray-500 text-white hover:bg-gray-400 border-2 border-gray-500" (click)="goToAccountDetail(account.id)">
+                                    <span class="mdi mdi-eye"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="accountsList.length == 0">
+                <div class="w-full mt-4 text-center text-md font-mono font-bold text-gray-500">No accounts found</div>
+            </div>
+        </ng-container>
+        <ng-template #LoadingOrError>
+            <div *ngIf="errorMessage; else Loading">
+                <div class="mt-4 text-center text-md font-mono font-bold text-gray-500">No accounts found due to
+                    <i class="text-center text-red-600">{{ errorMessage }}</i>
+                </div>
+            </div>
+            <ng-template #Loading>
+                <div class="flex items-center justify-center p-5">
+                    <div class="flex space-x-2 animate-pulse">
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    </div>
+                </div>
+            </ng-template>
+        </ng-template>
+    </div>
+</main>

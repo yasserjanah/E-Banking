@@ -1,0 +1,140 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-10/12 border-t-2 border-gray-100">
+        <span class="text-xl font-mono font-bold text-center float-right">
+            <button (click)="goToAddNewOperation()" class="p-2 border-2 border-red-500 shadow-md hover:shadow-lg">
+                <span class="mdi mdi-plus text-red-500"></span> Add Operation
+        </button>
+        </span>
+        <div class="text-2xl font-mono font-bold text-center ml-36">
+            <span class="text-3xl text-red-600 underline">#</span> E-Bank Customer Portal
+        </div>
+        <div class="mt-8 flex justify-center items-center gap-4 font-mono">
+            <button [ngClass]="{'bg-red-500 text-white': PITab}" (click)="updateTab('PITab')" class="p-2 ease-in-out bg-white border-2 border-red-500 shadow-md hover:shadow-lg hover:cursor-pointer">
+                Personal Information
+            </button>
+            <button [ngClass]="{'bg-red-500 text-white': ACTab}" (click)="updateTab('ACTab')" class="p-2 ease-in-out bg-white border-2 border-red-500 shadow-md hover:shadow-lg hover:cursor-pointer">
+                My Bank Accounts
+            </button>
+            <button [ngClass]="{'bg-red-500 text-white': LTTab}" (click)="updateTab('LTTab')" class="p-2 ease-in-out bg-white border-2 border-red-500 shadow-md hover:shadow-lg hover:cursor-pointer">
+                Last Transactions
+            </button>
+        </div>
+        <div class="mt-8" *ngIf="PITab">
+            <div class="mt-8 bg-stone-100 p-2 rounded-lg border-2 border-gray-100 w-4/6 mx-auto">
+                <div class="text-2xl font-mono font-bold text-center m-5 hover:underline">
+                    <span class="mdi mdi-information-outline text-red-500"></span> Personal Information
+                </div>
+                <div class="flex justify-center items-center font-mono">
+                    <div class="grid grid-cols-2 gap-1">
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-red-500 font-bold">Customer Id :</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-gray-600 font-bold">{{customer?.userId}}</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-red-500 font-bold">Name :</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-gray-600 font-bold">{{customer?.name}}</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-red-500 font-bold">Username :</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-gray-600 font-bold">{{customer?.username}}</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-red-500 font-bold">Email :</span>
+                        </div>
+                        <div class="text-xl font-mono text-center">
+                            <span class="text-gray-600 font-bold">{{customer?.email}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8" *ngIf="ACTab">
+            <div class="mt-8 p-2 rounded-lg border-2 border-gray-100 w-4/6 mx-auto">
+                <div class="text-2xl font-mono font-bold text-center m-5 hover:underline">
+                    <span class="mdi mdi-bank text-red-500"></span> My Bank Accounts
+                    <div class="text-gray-500 text-sm">
+                        (double click on the account to see more details)
+                    </div>
+                </div>
+                <div *ngIf="bankAccounts?.length != 0" class="col-span-4 grid grid-cols-3 px-5 gap-4 mb-4">
+                    <div (dblclick)="goToAccountDetail(ba.id)" *ngFor="let ba of bankAccounts;" class="bg-stone-100 h-32 relative border-2 p-2 rounded-md shadow-lg ease-in-out hover:border-red-500 hover:scale-105">
+                        <span class="float-right text-2xl font-mono">{{ ba.balance.toFixed(2) }}<span class="text-red-500 font-bold">$</span></span>
+                        <div class="text-2xl font-mono font-bold">
+                            <span *ngIf="ba.accountType == 'CurrentAccount'" class="mdi mdi-24px mdi-bank text-red-500">CA</span>
+                            <span *ngIf="ba.accountType == 'SavingAccount'" class="mdi mdi-24px mdi-bank text-red-500">SA</span>
+                        </div>
+                        <div class="mt-1 text-lg font-mono">
+                            <span class="text-gray-500">
+                                <span *ngIf="ba.accountType == 'CurrentAccount'">
+                                    overDraft : <span class="text-red-500">{{ ba.overDraft }}</span>
+                            </span>
+                            <span *ngIf="ba.accountType == 'SavingAccount'">
+                                    interestRate : <span class="text-red-500">{{ ba.interestRate }}%</span>
+                            </span>
+                            </span>
+                        </div>
+                        <div class="text-xl font-mono absolute bottom-0 right-0 p-1">
+                            <span class="text-gray-500">
+                                {{ ba.status }}
+                            </span>
+                        </div>
+                        <div class="text-xl font-mono absolute inset-x-2 bottom-1">
+                            <span class="mdi mdi-clock-time-three-outline text-red-500"></span> {{ ba.createdAt | date: 'dd/MM/yyyy' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8" *ngIf="LTTab">
+            <div class="mt-8 p-2 rounded-lg border-2 border-gray-100 w-4/6 mx-auto">
+                <div class="text-2xl font-mono font-bold text-center m-5 hover:underline">
+                    <span class="mdi mdi-align-vertical-top text-red-500"></span> Last Transactions
+                </div>
+                <table class="border-collapse w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-6 w-1/6 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">#</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Type</th>
+                            <th class="px-6 w-1/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Amount</th>
+                            <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Description</th>
+                            <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white">Date</th>
+                            <!-- <th class="px-6 w-2/4 align-middle py-3 uppercase whitespace-nowrap font-bold text-left bg-red-600 text-white"></th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let op of operations; index as i" [ngClass]="{'bg-gray-100': i % 2 != 0}" class="font-mono">
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ i+1 }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ op.type }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span *ngIf="op.type == 'CREDIT'" class="text-green-600 font-bold">+{{ op.amount.toFixed(2) }}</span>
+                                <span *ngIf="op.type == 'DEBIT'" class="text-red-600 font-bold">-{{ op.amount.toFixed(2) }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ op.description }}</span>
+                            </td>
+                            <td class="px-6 align-middle py-3 whitespace-nowrap font-semibold text-left text-gray-500 ">
+                                <span class="text-black font-bold">{{ op.operationDate | date }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div *ngIf="operationsPagination?.accountOperationDTOS?.length == 0" class="flex justify-center text-center mx-auto w-full p-5">
+                    <div class="text-gray-600">
+                        There are not transactions
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

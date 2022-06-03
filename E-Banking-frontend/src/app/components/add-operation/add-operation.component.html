@@ -1,0 +1,95 @@
+<app-navbar></app-navbar>
+<main class="p-5 flex justify-center">
+    <div class="w-3/6 p-4 bg-white shadow-md border-t-2 border-t-gray-100">
+        <h1 class="text-center font-mono font-bold text-2xl">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Add New Operation
+        </h1>
+        <div class="mt-5 flex justify-center gap-8 font-mono">
+            <button (click)="updateOperationType('DEBIT')" [ngClass]="{'text-white bg-red-500': (operationType == 'DEBIT')}" class="border-2 border-gray-900 font-bold shadow-md hover:shadow-lg px-3 p-1">DEBIT</button>
+            <button (click)="updateOperationType('CREDIT')" [ngClass]="{'text-white bg-red-500': (operationType == 'CREDIT')}" class="border-2 border-gray-900 font-bold shadow-md hover:shadow-lg px-3 p-1">CREDIT</button>
+            <button (click)="updateOperationType('TRANSFER')" [ngClass]="{'text-white bg-red-500': (operationType == 'TRANSFER')}" class="border-2 border-gray-900 font-bold shadow-md hover:shadow-lg px-3 p-1">TRANSFER</button>
+        </div>
+        <form *ngIf="operationType == 'DEBIT'" class="my-8 text-center font-mono" [formGroup]="debitOperationFormGroup" (ngSubmit)="createNewDEBITOperation()">
+            <div class="mt-4">
+                <span class="text-xl text-gray-700 underline hover:text-red-500 hover:font-bold">
+                    Debit Operation
+                </span>
+            </div>
+            <div class="mt-6">
+                <div class="block text-black font-mono font-bold">Choose account:</div>
+                <select class="py-3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="accountId">
+                    <option *ngFor="let account of accounts" [value]="account.id">
+                        <span class="text-red-600">{{ account.id }}</span> - {{ account.accountType }} - {{ account.balance.toFixed(2) }}$
+                    </option>
+                </select>
+            </div>
+            <div class="mt-4">
+                <input type="number" class="p-2 w-2/3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="amount" placeholder="Amount">
+            </div>
+            <div class="mt-4">
+                <textarea class="p-2 w-3/4 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="description" placeholder="Description"></textarea>
+            </div>
+            <div class="mt-4">
+                <button class="p-2 w-3/4 border-2 bg-red-500 text-white border-red-600 font-bold shadow-md hover:shadow-lg px-3" type="submit">Create</button>
+            </div>
+        </form>
+
+        <form *ngIf="operationType == 'CREDIT'" class="my-8 text-center font-mono" [formGroup]="creditOperationFormGroup" (ngSubmit)="createNewCREDITOperation()">
+            <div class="mt-4">
+                <span class="text-xl text-gray-700 underline hover:text-red-500 hover:font-bold">
+                    Credit Operation
+                </span>
+            </div>
+            <div class="mt-4">
+                <div class="block text-black font-mono font-bold">Choose account:</div>
+                <select class="py-3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="accountId">
+                    <option *ngFor="let account of accounts" [value]="account.id">
+                        <span class="text-red-600">{{ account.id }}</span> - {{ account.accountType }} - {{ account.balance.toFixed(2) }}$
+                    </option>
+                </select>
+            </div>
+            <div class="mt-4">
+                <input type="number" class="p-2 w-2/3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="amount" placeholder="Amount">
+            </div>
+            <div class="mt-4">
+                <textarea class="p-2 w-3/4 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="description" placeholder="Description"></textarea>
+            </div>
+            <div class="mt-4">
+                <button class="p-2 w-3/4 border-2 bg-red-500 text-white border-red-600 font-bold shadow-md hover:shadow-lg px-3" type="submit">Create</button>
+            </div>
+        </form>
+
+        <form *ngIf="operationType == 'TRANSFER'" class="my-8 text-center font-mono" [formGroup]="transferOperationFormGroup" (ngSubmit)="createNewTRANSFEROperation()">
+            <div class="mt-4">
+                <span class="text-xl text-gray-700 underline hover:text-red-500 hover:font-bold">
+                    Transfer Operation
+                </span>
+            </div>
+            <div class="mt-4">
+                <div class="block text-black font-mono font-bold">Choose source account:</div>
+                <select class="py-3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="fromAccountId">
+                    <option *ngFor="let account of accounts" [value]="account.id">
+                        <span class="text-red-600">{{ account.id }}</span> - {{ account.accountType }} - {{ account.balance.toFixed(2) }}$
+                    </option>
+                </select>
+            </div>
+            <div class="mt-4">
+                <div class="block text-black font-mono font-bold">Choose destination account:</div>
+                <select class="py-3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="toAccountId">
+                    <option *ngFor="let account of allAccounts" [value]="account.id">
+                        <span class="text-red-600">{{ account.customerDTO?.name }}</span> - {{ account.accountType }} - {{ account.balance.toFixed(2) }}$
+                    </option>
+                </select>
+            </div>
+            <div class="mt-4">
+                <input type="number" class="p-2 w-2/3 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="amount" placeholder="Amount">
+            </div>
+            <div class="mt-4">
+                <textarea class="p-2 w-3/4 border-2 border-red-500 font-bold shadow-md hover:shadow-lg px-3" formControlName="description" placeholder="Description"></textarea>
+            </div>
+            <div class="mt-4">
+                <button class="p-2 w-3/4 border-2 bg-red-500 text-white border-red-600 font-bold shadow-md hover:shadow-lg px-3" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</main>

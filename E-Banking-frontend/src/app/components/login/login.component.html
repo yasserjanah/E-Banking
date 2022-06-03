@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+<main class="flex justify-center items-center mt-8">
+    <div class="bg-white shadow-lg rounded-md p-6 w-3/12 border-t-2 border-gray-100">
+        <div class="text-2xl font-mono font-bold text-center mb-3">
+            <span class="text-3xl text-red-600 hover:underline">#</span> Login
+        </div>
+        <hr>
+        <form class="mt-5 text-center" [formGroup]="loginForm" (ngSubmit)="login()">
+            <div class="mt-4">
+                <input formControlName="username" type="text" class="bg-stone-100 p-2 w-3/4 text-center" placeholder="Username" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="loginForm.controls['username'].touched && loginForm.controls['username'].errors && loginForm.controls['username'].errors!['required']">
+                    Username is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <input formControlName="password" type="password" class="bg-stone-100 p-2 w-3/4 text-center" placeholder="Password" />
+                <span class="block mt-2 text-red-600 text-xs italic" *ngIf="loginForm.controls['password'].touched && loginForm.controls['password'].errors && loginForm.controls['password'].errors!['required']">
+                    Password is required
+                </span>
+            </div>
+            <div class="mt-4">
+                <button [disabled]="!loginForm.valid" class="bg-red-500 disabled:bg-red-200 disabled:border-0 hover:bg-red-700 text-white font-bold py-2 px-4 w-3/4">
+                    Login
+                </button>
+            </div>
+        </form>
+    </div>
+</main>
